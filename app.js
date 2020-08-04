@@ -15,6 +15,9 @@ const {
     token
 } = require(arr[0]);
 
+const active = new Map();
+const ownerID = "654";
+
 // Display a message when the bot comes online
 client.on(arr[1], () => {
     console.log(`Logged in as ${client.user.tag}`);
@@ -33,10 +36,14 @@ client.on(arr[4], () => {
 // Check for new messages
 client.on(arr[2], async msg => {
 
-    // let ops = {
-    //     ownerID : ownerID,
-    //     active : active
-    // }
+    if (!msg.guild) {
+        return;
+    }
+
+    let ops = {
+        ownerID : ownerID,
+        active : active
+    }
 
     // Fail safe and msgContent is the command
     const msgContent = msg.content.split(" ")[0].toLowerCase();
@@ -44,7 +51,6 @@ client.on(arr[2], async msg => {
 
     // args is the url
     let args = msg.content.split(" ").slice(1);
-    console.log(args);
 
     // Send back a reply when the spesific command has been written by a user
     if (msgContent === "!hello") {
@@ -56,7 +62,7 @@ client.on(arr[2], async msg => {
     }
 
     if (msgContent === "!play") {
-        playCommand.run(client, msg, args);
+        playCommand.run(client, msg, args, ops);
     }
 })
 
